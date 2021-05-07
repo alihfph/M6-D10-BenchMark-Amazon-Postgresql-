@@ -19,10 +19,7 @@ router.route("/:userId").get(async (req, res, next) => {
         attributes: [
           "productId",
 
-          [
-            Sequelize.fn("COUNT", Sequelize.col("productId.quantity")),
-            "unitaryQty",
-          ],
+          [Sequelize.fn("COUNT", Sequelize.col("productId")), "unitaryQty"],
           [
             Sequelize.fn("SUM", Sequelize.col("productId.price")),
             "unitaryPrice",

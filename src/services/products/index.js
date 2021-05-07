@@ -49,6 +49,7 @@ router
       next(e);
     }
   })
+
   .delete(async (req, res, next) => {
     try {
       const rows = await Product.destroy({ where: { id: req.params.id } });
@@ -62,5 +63,31 @@ router
       next(e);
     }
   });
+
+// router
+// .route(
+//   "/:productId/upload",
+//   cloudMulter.single("picture"))
+//   .post
+//   (async (req, res, next) => {
+//     try {
+//       const modifiedProduct = await Product.update(
+//         {
+//           productId: req.params.productId,
+//         },
+//         {
+//           $set: {
+//             imageUrl: req.file.path,
+//           },
+//         },
+//         { new: true }
+//       );
+//       res.send(modifiedProduct);
+//     } catch (error) {
+//       console.log(error);
+//       next(error);
+//     }
+//   }
+// );
 
 module.exports = router;
