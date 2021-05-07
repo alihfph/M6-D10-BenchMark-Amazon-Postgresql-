@@ -1,0 +1,37 @@
+{
+  "name": "m6-d9-sequelize",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "engines": {
+    "node": "v14.15.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -r dotenv/config src",
+    "start": "node src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "init": "^0.1.2",
+    "pg": "^8.5.1",
+    "sequelize": "^6.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alihfph/M6-D10-BenchMark-Amazon-Postgresql-.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alihfph/M6-D10-BenchMark-Amazon-Postgresql-/issues"
+  },
+  "homepage": "https://github.com/alihfph/M6-D10-BenchMark-Amazon-Postgresql-#readme",
+  "description": ""
+}
