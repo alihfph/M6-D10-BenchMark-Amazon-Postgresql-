@@ -23,9 +23,7 @@ db.sequelize
   .then(async (user) => {
     if (!user) {
       const newUser = await db.User.create({
-        firstName: "Hafiz",
-        lastName: "Ali",
-        email: "ali.hfph@gmail.com",
+        firstName: "Guest User",
       });
     }
   })
