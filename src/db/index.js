@@ -1,37 +1,25 @@
 const { Sequelize, DataTypes } = require("sequelize");
-const User = require('./users')
-const Category = require('./categories')
-const Product = require('./products')
-const Cart = require('./carts')
+const User = require("./users");
+const Review = require("./reviews");
+const Product = require("./products");
+const Cart = require("./carts");
 const sequelize = new Sequelize(
   process.env.PGDATABASE,
   process.env.PGUSER,
   process.env.PGPASSWORD,
-  {
-    host: process.env.PGHOST,
-    dialect: "postgres",
-    dialectOptions:{
-      ssl:{
-        require:true, 
-        rejectUnauthorized:false
-      }
-    }
-  }
+  { port: process.env.PGPORT, host: process.env.PGHOST, dialect: "postgres" }
 );
 
 const models = {
-  User:User(sequelize, DataTypes),
-  Category:Category(sequelize, DataTypes),
-  Product:Product(sequelize, DataTypes),
-  Cart:Cart(sequelize, DataTypes),
-  sequelize:sequelize
-
-}
+  User: User(sequelize, DataTypes),
+  Review: Review(sequelize, DataTypes),
+  Product: Product(sequelize, DataTypes),
+  Cart: Cart(sequelize, DataTypes),
+  sequelize: sequelize,
+};
 
 // models.Product.belongsTo(models.Category)
 // models.Category.hasMany(models.Product)
-
-
 
 // models.Product.belongsToMany(models.User, {through:models.Cart})
 // models.User.belongsToMany(models.Product, {through:models.Cart})
@@ -42,12 +30,11 @@ const models = {
 // models.Cart.belongsTo(models.Product)
 // models.Product.hasMany(models.Cart)
 
-Object.keys(models).forEach(modelName=> {
- 
-  if('associate' in models[modelName]) {
-    models[modelName].associate(models)
+Object.keys(models).forEach((modelName) => {
+  if ("associate" in models[modelName]) {
+    models[modelName].associate(models);
   }
-})
+});
 sequelize
   .authenticate()
   .then(() => console.log("Connection established"))
