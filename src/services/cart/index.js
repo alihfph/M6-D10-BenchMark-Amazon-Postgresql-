@@ -36,26 +36,48 @@ router.route("/:userId").get(async (req, res, next) => {
     next(e);
   }
 });
-router
-  .route("/:userId/:productId")
-  .post(async (req, res, next) => {
-    try {
-      const rawCart = await Cart.create({
-        productId: req.params.productId,
-        userId: req.params.userId,
-      });
-      res.send(rawCart);
-    } catch (e) {
-      console.log(e);
-      next(e);
+router.route("/").get(async (req, res, next) => {
+  try {
+    const cart = await Cart.findAll({ include: User });
+    res.send(cart);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+router.route("/:userId/:productId/:id").get(async (req, res, next) => {
+  try {
+    const cart = await Cart.findByPk(req.params.id);
+    res.send(cart);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+router.route("/:userId/:productId").post(async (req, res, next) => {
+  try {
+    const rawCart = await Cart.create({
+      userId: req.params.userId,
+      productId: req.params.productId,
+    });
+    res.send(rawCart);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+router.route("/:userId/:id").delete(async (req, res, next) => {
+  try {
+    const cart = await Cart.destroy(req.params.id);
+    if (cart > 0) {
+      res.send("ok");
+    } else {
+      res.status(404).send("Not found");
     }
-  })
-  .delete(async (req, res, next) => {
-    try {
-    } catch (e) {
-      console.log(e);
-      next(e);
-    }
-  });
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
 
 module.exports = router;
