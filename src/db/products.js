@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       required: true,
     },
+    quantity: {
+      type: DataTypes.FLOAT,
+      required: true,
+    },
     category: {
       type: DataTypes.STRING,
       required: true,

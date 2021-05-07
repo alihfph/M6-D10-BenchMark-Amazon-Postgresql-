@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
       },
       rate: {
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT,
         required: true,
       },
     },

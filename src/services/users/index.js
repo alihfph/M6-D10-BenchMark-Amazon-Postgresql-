@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../../db").User;
+const Product = require("../../db").Product;
 const Cart = require("../../db").Cart;
 const router = express.Router();
 
@@ -7,7 +8,7 @@ router
   .route("/")
   .get(async (req, res, next) => {
     try {
-      const users = await User.findAll({ include: Cart });
+      const users = await User.findAll({ include: Cart, include: Product });
       res.send(users);
     } catch (e) {
       console.log(e);
@@ -30,6 +31,7 @@ router
     try {
       const user = await User.findByPk(req.params.id, {
         include: Cart,
+        include: Product,
       });
       res.send(user);
     } catch (e) {

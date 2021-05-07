@@ -13,23 +13,41 @@ router.route("/:userId").get(async (req, res, next) => {
     // inner join products as p
     // on c."productId"=p.id
     // group by "productId", p.id
-    const cart = await Cart.findAll({
-      attributes: [
-        "productId",
 
-        [Sequelize.fn("COUNT", Sequelize.col("productId")), "unitaryQty"],
-        [Sequelize.fn("SUM", Sequelize.col("product.price")), "unitaryPrice"],
-      ],
-      group: ["productId", "product.id", "user.id", "product->review.id"],
-      include: [{ model: Product, include: Review }, User],
-    });
+    const cart = await Cart.findAll(
+      {
+        attributes: [
+          "productId",
+
+          [
+            Sequelize.fn("COUNT", Sequelize.col("productId.quantity")),
+            "unitaryQty",
+          ],
+          [
+            Sequelize.fn("SUM", Sequelize.col("productId.price")),
+            "unitaryPrice",
+          ],
+        ],
+        group: ["productId", "product.id", "user.id", "product->review.id"],
+        include: [{ model: Product, include: Review }, User],
+      }
+      // {
+      //   attributes: [
+      //     "productId",
+      //     [Sequelize.fn("count", Sequelize.col("product.price")), "count"],
+      //   ],
+      //   group: ["Cart.productId"],
+      //   raw: true,
+      //   order: Sequelize.literal("count DESC"),
+      // }
+    );
 
     const totalQty = await Cart.count({ where: { userId: req.params.userId } });
 
-    const totalPrice = await Cart.sum("product.price", {
-      where: { userId: req.params.userId },
-      include: { model: Product, attributes: [] },
-    });
+    // const totalPrice = await Cart.sum("product.price", {
+    //   where: { userId: req.params.userId },
+    //   include: { model: Product, attributes: [] },
+    // });
     res.send({ cart, totalPrice, totalQty });
   } catch (e) {
     console.log(e);
@@ -45,9 +63,12 @@ router.route("/").get(async (req, res, next) => {
     next(e);
   }
 });
-router.route("/:userId/:productId/:id").get(async (req, res, next) => {
+router.route("/:userId/:id").get(async (req, res, next) => {
   try {
-    const cart = await Cart.findByPk(req.params.id);
+    const cart = await Cart.findByPk(req.params.id, {
+      include: User,
+      include: Product,
+    });
     res.send(cart);
   } catch (e) {
     console.log(e);
@@ -66,6 +87,21 @@ router.route("/:userId/:productId").post(async (req, res, next) => {
     next(e);
   }
 });
+router.route("/:userId/productId/:id").delete(async (req, res, next) => {
+  try {
+    const cart = await Cart.destroy(req.params.productId);
+    console.log("this is I am getting", cart);
+    if (cart > 0) {
+      res.send("ok");
+    } else {
+      res.status(404).send("Not found");
+    }
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
 router.route("/:userId/:id").delete(async (req, res, next) => {
   try {
     const cart = await Cart.destroy(req.params.id);
